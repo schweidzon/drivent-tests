@@ -6,6 +6,7 @@ import paymentsService from '@/services/payments-service';
 export async function getPaymentByTicketId(req: AuthenticatedRequest, res: Response) {
   try {
     const ticketId = Number(req.query.ticketId);
+    console.log(ticketId)
     const { userId } = req;
 
     if (!ticketId) return res.sendStatus(httpStatus.BAD_REQUEST);

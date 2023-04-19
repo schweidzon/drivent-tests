@@ -1,4 +1,4 @@
-import { Ticket, TicketStatus, TicketType } from '@prisma/client';
+import { Enrollment, Ticket, TicketStatus, TicketType } from '@prisma/client';
 import { prisma } from '@/config';
 import { CreateTicketParams } from '@/protocols';
 
@@ -32,7 +32,8 @@ async function findTickeyById(ticketId: number): Promise<Ticket> {
   });
 }
 
-async function findTickeWithTypeById(ticketId: number): Promise<Ticket> {
+async function findTickeWithTypeById(ticketId: number){
+  
   return prisma.ticket.findFirst({
     where: {
       id: ticketId,
@@ -54,6 +55,43 @@ async function ticketProcessPayment(ticketId: number): Promise<Ticket> {
   });
 }
 
+async function getTicketByEnrollmentId(enrollment: Enrollment) {
+  return prisma.ticket.findFirst({
+      where: {
+          enrollmentId: enrollment.id
+      },
+      select: {
+          id: true,
+          status: true,
+          ticketTypeId: true,
+          enrollmentId: true,
+          TicketType: true,
+          createdAt: true,
+          updatedAt: true
+      }
+  })
+
+}
+
+
+async function getTicketId(ticketId: number) {
+    
+  return prisma.ticket.findFirst({
+      where: {
+          id: ticketId
+      }
+  })
+}
+
+async function getTicketTypeById(ticketId: number) {
+  return prisma.ticketType.findFirst({
+      where: {
+          id:ticketId
+      }
+  })
+}
+
+
 export default {
   findTicketTypes,
   findTicketByEnrollmentId,
@@ -61,4 +99,7 @@ export default {
   findTickeyById,
   findTickeWithTypeById,
   ticketProcessPayment,
+  getTicketByEnrollmentId,
+  getTicketId,
+  getTicketTypeById
 };
