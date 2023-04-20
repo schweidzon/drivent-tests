@@ -25,3 +25,4 @@ export function createRoom(hotelId: number): Promise<Room> {
         },
     });
 }
+
