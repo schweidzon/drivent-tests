@@ -14,3 +14,16 @@ export async function getAllHotels(req: AuthenticatedRequest, res: Response, nex
     }
 
 }
+
+export async function getHotelbyId(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+    const hotelId = parseInt(req.params.hotelId) 
+    const userId = req.userId
+    console.log(hotelId)
+    try {
+
+        const hotel = await hotelService.getHotelById(hotelId, userId)
+        return res.send(hotel)
+    } catch (error) {
+        next(error)
+    }
+}

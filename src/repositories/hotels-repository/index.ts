@@ -9,8 +9,20 @@ async function getAllHotels() {
    })
 }
 
+async function getHotelById(hotelId: number) {
+    return prisma.hotel.findFirst({
+        where: {
+            id: hotelId
+        },
+        include: {
+            Rooms: true
+        }
+    })
+}
+
 const hotelRepository = {
-    getAllHotels
+    getAllHotels,
+    getHotelById
 }
 
 export default hotelRepository

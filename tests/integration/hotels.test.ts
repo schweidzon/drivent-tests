@@ -131,3 +131,9 @@ describe("GET /hotels", () => {
     })
 
 })
+
+// describe("GET /hotels/:id", () => {
+//     describe("When token is valid", async () => {
+//         it("Should respond")
+//     })
+// })

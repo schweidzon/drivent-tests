@@ -37,8 +37,16 @@ async function getAllHotels(userId: number) {
   return hotels
 
 }
+
+async function getHotelById(hotelId: number, userId: number) {
+  await validateInfos(userId)
+  const hotel = await hotelRepository.getHotelById(hotelId)
+  if (!hotel) throw notFoundError()
+  return hotel
+}
 const hotelService = {
-  getAllHotels
+  getAllHotels,
+  getHotelById
 }
 
 export default hotelService
