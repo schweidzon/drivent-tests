@@ -34,6 +34,18 @@ describe("GET /hotels", () => {
             expect(response.status).toBe(404)
 
         })
+        it("Should respond with status 404 if no hotels if found", async () => {
+            const user = await createUser();
+            const token = await generateValidToken(user);
+            const userEnrollment = await createEnrollmentWithAddress(user);
+            const ticketType = await createTicketTypeWithHotel();
+            await createTicket(userEnrollment.id, ticketType.id, TicketStatus.PAID);
+
+            const response = await server.get("/hotels").set('Authorization', `Bearer ${token}`);
+
+            expect(response.status).toBe(404)
+
+        })
 
 
         describe("Should respond with status 402 if ticket status is not PAID, ticket is remote or doesn't includes hotel",  () => {
