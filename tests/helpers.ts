@@ -29,5 +29,5 @@ export async function generateValidToken(user?: User) {
 }
 
 export function generateRandomId(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1)) + min;    
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
