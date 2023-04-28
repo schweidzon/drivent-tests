@@ -25,12 +25,13 @@ async function checkBooking(userId: number) {
 async function changeBooking(bookingId: number, userId: number, roomId: number) {
 
     const checkBooking = await bookingRepository.checkBookingById(bookingId)
+    if(!checkBooking) throw ForbiddenError()
     
     const checkUserBooking = await bookingRepository.checkBooking(userId)
 
     const checkRoom = await roomRepository.findById(roomId)
 
-    if (!checkBooking || !checkRoom || !checkUserBooking) throw notFoundError()
+    if (!checkRoom || !checkUserBooking) throw notFoundError()
 
     if (checkRoom.capacity === checkRoom.Booking.length) throw ForbiddenError()
 
