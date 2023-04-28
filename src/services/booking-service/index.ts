@@ -16,13 +16,31 @@ async function createBooking(roomId: number, userId: number): Promise<Booking> {
 
 async function checkBooking(userId: number) {
     const checkBooking = await bookingRepository.checkBooking(userId)
-    if(!checkBooking) throw notFoundError()
+    if (!checkBooking || checkBooking.length === 0) throw notFoundError()
     return checkBooking
+}
+
+async function changeBooking(bookingId: number, userId: number, roomId: number) {
+
+    const checkBooking = await bookingRepository.checkBookingById(bookingId)
+    
+    const checkUserBooking = await bookingRepository.checkBooking(userId)
+
+    const checkRoom = await roomRepository.findById(roomId)
+
+    if (!checkBooking || !checkRoom || !checkUserBooking) throw notFoundError()
+
+    if (checkRoom.capacity === checkRoom.Booking.length) throw ForbiddenError()
+
+    const changedBooking = await bookingRepository.changeBooking(bookingId, roomId, userId)
+
+    return changedBooking
 }
 
 const bookingService = {
     createBooking,
-    checkBooking
+    checkBooking,
+    changeBooking
 }
 
 export default bookingService

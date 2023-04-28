@@ -6,6 +6,9 @@ async function createBooking(roomId: number, userId: number): Promise<Booking> {
         data: {
             roomId,
             userId,
+        },
+        include: {
+            Room: true
         }
     })
 }
@@ -22,9 +25,33 @@ async function checkBooking(userId: number) {
     })
 }
 
+async function checkBookingById(bookingId: number) {
+    return prisma.booking.findFirst({
+        where: {
+            id: bookingId
+        }
+    })
+}
+
+
+async function changeBooking(bookingId: number, roomId: number, userId: number) {
+    deleteBooking(bookingId)
+    return createBooking(roomId, userId)
+
+}
+
+async function deleteBooking(bookingId: number)  {
+    await prisma.booking.delete({
+        where: {
+            id:bookingId
+        }
+    })
+}
 const bookingRepository = {
     createBooking,
-    checkBooking
+    checkBooking,
+    changeBooking,
+    checkBookingById
 }
 
 export default bookingRepository
