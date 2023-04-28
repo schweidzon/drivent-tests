@@ -3,10 +3,9 @@ import { ForbiddenError } from "@/errors/forbidden--error"
 import bookingRepository from "@/repositories/booking-repository.ts"
 import roomRepository from "@/repositories/room-repository"
 import { Booking } from "@prisma/client"
-import hotelService from '@/services/hotels-service';
 import enrollmentRepository from "@/repositories/enrollment-repository"
 import ticketsRepository from "@/repositories/tickets-repository"
-import { paymentRequiredError } from "@/errors/payment-required-error"
+
 
 async function validateInfos(userId: number) {
     const checkEnrollment = await enrollmentRepository.findWithAddressByUserId(userId);
