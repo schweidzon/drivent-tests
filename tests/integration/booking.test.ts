@@ -165,12 +165,44 @@ describe("POST /booking", () => {
         expect(response.status).toBe(403);
       });
     });
+    it("Should respod with status 404 if roomId doesn't exists", async () => {
+      const user = await createUser();
+      const token = await generateValidToken(user);
+      const userEnrollment = await createEnrollmentWithAddress(user);
+      const ticketType = await createTicketTypeWithHotel();
+      await createTicket(userEnrollment.id, ticketType.id, TicketStatus.PAID);
+      const hotel = await createHotel();
+      const room = await createRoom(hotel.id);
+     
+
+      const response = await server.post(`/booking`).set('Authorization', `Bearer ${token}`).send({ roomId: 0 });
+
+      expect(response.status).toBe(404);
+
+    })
+    it("Should respod with status 403 if room doesn't have anymore capacity available", async () => {
+      const user = await createUser();
+      const token = await generateValidToken(user);
+      const userEnrollment = await createEnrollmentWithAddress(user);
+      const ticketType = await createTicketTypeWithHotel();
+      await createTicket(userEnrollment.id, ticketType.id, TicketStatus.PAID);
+      const hotel = await createHotel();
+      const room = await createRoomWithCapacityOne(hotel.id);
+
+      await createBooking(room.id, user.id)
+
+
+      const response = await server.post(`/booking`).set('Authorization', `Bearer ${token}`).send({ roomId: room.id });
+
+      expect(response.status).toBe(403);
+
+    })
 
     it("Should respond with status 404 if user doesn't have enrollment", async () => {
       const user = await createUser();
       const token = await generateValidToken(user);
-    
-      
+
+
       const hotel = await createHotel();
       const room = await createRoom(hotel.id);
 
