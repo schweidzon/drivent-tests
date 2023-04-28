@@ -6,9 +6,9 @@ import { changeBooking, checkBooking, createBooking } from '@/controllers/bookin
 const bookingRouter = Router();
 
 bookingRouter
-.use(authenticateToken)
-.post("/", validateBody(bookingSchema), createBooking)
-.get("/", checkBooking )
-.put("/:bookingId", changeBooking)
+  .use(authenticateToken)
+  .post('/', validateBody(bookingSchema), createBooking)
+  .get('/', checkBooking)
+  .put('/:bookingId', changeBooking);
 
-export {bookingRouter}
+export { bookingRouter };

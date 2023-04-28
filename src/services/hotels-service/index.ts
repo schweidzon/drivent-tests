@@ -38,7 +38,6 @@ async function getHotelById(hotelId: number, userId: number) {
 const hotelService = {
   getAllHotels,
   getHotelById,
-  
 };
 
 export default hotelService;
