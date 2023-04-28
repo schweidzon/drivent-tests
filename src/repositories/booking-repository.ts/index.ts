@@ -14,7 +14,7 @@ async function createBooking(roomId: number, userId: number): Promise<Booking> {
 }
 
 async function checkBooking(userId: number) {
-    return prisma.booking.findMany({
+    return prisma.booking.findFirst({
         where: {
             userId
         },

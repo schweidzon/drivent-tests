@@ -3,10 +3,12 @@ import { ForbiddenError } from "@/errors/forbidden--error"
 import bookingRepository from "@/repositories/booking-repository.ts"
 import roomRepository from "@/repositories/room-repository"
 import { Booking } from "@prisma/client"
+import hotelService from '@/services/hotels-service';
 
 
 
 async function createBooking(roomId: number, userId: number): Promise<Booking> {
+    await hotelService.validateInfos(userId)
     const checkRoom = await roomRepository.findById(roomId)
     if (!checkRoom) throw notFoundError()
     if (checkRoom.capacity === checkRoom.Booking.length) throw ForbiddenError()
@@ -16,7 +18,7 @@ async function createBooking(roomId: number, userId: number): Promise<Booking> {
 
 async function checkBooking(userId: number) {
     const checkBooking = await bookingRepository.checkBooking(userId)
-    if (!checkBooking || checkBooking.length === 0) throw notFoundError()
+    if (!checkBooking) throw notFoundError()
     return checkBooking
 }
 
@@ -36,6 +38,8 @@ async function changeBooking(bookingId: number, userId: number, roomId: number) 
 
     return changedBooking
 }
+
+
 
 const bookingService = {
     createBooking,
