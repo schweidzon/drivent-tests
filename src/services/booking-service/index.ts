@@ -9,15 +9,16 @@ import ticketsRepository from "@/repositories/tickets-repository"
 
 async function validateInfos(userId: number) {
     const checkEnrollment = await enrollmentRepository.findWithAddressByUserId(userId);
+    if (!checkEnrollment) throw notFoundError()
 
     const checkTicket = await ticketsRepository.getTicketByEnrollmentId(checkEnrollment);
 
-    if (!checkTicket ||!checkEnrollment) throw notFoundError();
-    
+    if (!checkTicket) throw notFoundError();
+
     const checkTickeType = await ticketsRepository.getTicketTypeById(checkTicket.ticketTypeId);
     if (checkTicket.status !== 'PAID' || checkTickeType.includesHotel === false || checkTickeType.isRemote === true) throw ForbiddenError();
-  
-  }
+
+}
 
 
 
@@ -44,7 +45,7 @@ async function changeBooking(bookingId: number, userId: number, roomId: number) 
 
     const checkRoom = await roomRepository.findById(roomId)
 
-    if (!checkRoom)  throw notFoundError()
+    if (!checkRoom) throw notFoundError()
 
     if (!checkUserBooking || !checkBooking || checkRoom.capacity === checkRoom.Booking.length) throw ForbiddenError()
 

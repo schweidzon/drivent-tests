@@ -169,10 +169,8 @@ describe("POST /booking", () => {
     it("Should respond with status 404 if user doesn't have enrollment", async () => {
       const user = await createUser();
       const token = await generateValidToken(user);
-      const ticketType = await createTicketTypeWithHotel();
+    
       
-      const enrollment = await createEnrollmentWithAddress();
-      await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
       const hotel = await createHotel();
       const room = await createRoom(hotel.id);
 

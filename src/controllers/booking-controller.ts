@@ -5,7 +5,6 @@ import { NextFunction, Response } from "express";
 export async function createBooking(req: AuthenticatedRequest, res: Response, next: NextFunction) {
     const roomId = req.body.roomId as number
     const userId = req.userId;
-
     try {
         const booking = await bookingService.createBooking(roomId, userId)
        
