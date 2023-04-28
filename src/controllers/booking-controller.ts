@@ -5,7 +5,6 @@ import { NextFunction, Response } from "express";
 export async function createBooking(req: AuthenticatedRequest, res: Response, next: NextFunction) {
     const roomId = req.body.roomId as number
     const userId = req.userId;
-    console.log(roomId, userId)
 
     try {
         const booking = await bookingService.createBooking(roomId, userId)
@@ -16,4 +15,16 @@ export async function createBooking(req: AuthenticatedRequest, res: Response, ne
         next(error)
     }
     
+}
+
+export async function checkBooking(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+    const userId = req.userId;
+
+    try {
+        const booking = await bookingService.checkBooking(userId)
+        return res.send(booking)
+    } catch (error) {
+        console.log(error)
+        next(error)
+    }
 }

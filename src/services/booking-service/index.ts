@@ -14,8 +14,15 @@ async function createBooking(roomId: number, userId: number): Promise<Booking> {
     return booking
 }
 
+async function checkBooking(userId: number) {
+    const checkBooking = await bookingRepository.checkBooking(userId)
+    if(!checkBooking) throw notFoundError()
+    return checkBooking
+}
+
 const bookingService = {
-    createBooking
+    createBooking,
+    checkBooking
 }
 
 export default bookingService
