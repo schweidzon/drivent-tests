@@ -25,3 +25,17 @@ export function createRoom(hotelId: number): Promise<Room> {
     },
   });
 }
+
+
+export function createRoomWithCapacityOne(hotelId: number): Promise<Room> {
+  return prisma.room.create({
+    data: {
+      name: faker.lorem.sentence(),
+      capacity: 1,
+      hotelId: hotelId,
+      createdAt: dayjs().subtract(1, 'day').toDate(),
+      updatedAt: dayjs().subtract(1, 'day').toDate(),
+    },
+  });
+}
+

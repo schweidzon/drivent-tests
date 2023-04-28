@@ -9,12 +9,10 @@ import ticketsRepository from "@/repositories/tickets-repository"
 
 async function validateInfos(userId: number) {
     const checkEnrollment = await enrollmentRepository.findWithAddressByUserId(userId);
-    
-    if (!checkEnrollment) throw notFoundError();
-  
+
     const checkTicket = await ticketsRepository.getTicketByEnrollmentId(checkEnrollment);
-    
-    if (!checkTicket) throw notFoundError();
+
+    if (!checkTicket ||!checkEnrollment) throw notFoundError();
     
     const checkTickeType = await ticketsRepository.getTicketTypeById(checkTicket.ticketTypeId);
     if (checkTicket.status !== 'PAID' || checkTickeType.includesHotel === false || checkTickeType.isRemote === true) throw ForbiddenError();
@@ -41,15 +39,14 @@ async function checkBooking(userId: number) {
 async function changeBooking(bookingId: number, userId: number, roomId: number) {
 
     const checkBooking = await bookingRepository.checkBookingById(bookingId)
-    if(!checkBooking) throw ForbiddenError()
-    
+
     const checkUserBooking = await bookingRepository.checkBooking(userId)
 
     const checkRoom = await roomRepository.findById(roomId)
 
-    if (!checkRoom || !checkUserBooking) throw notFoundError()
+    if (!checkRoom)  throw notFoundError()
 
-    if (checkRoom.capacity === checkRoom.Booking.length) throw ForbiddenError()
+    if (!checkUserBooking || !checkBooking || checkRoom.capacity === checkRoom.Booking.length) throw ForbiddenError()
 
     const changedBooking = await bookingRepository.changeBooking(bookingId, roomId, userId)
 
